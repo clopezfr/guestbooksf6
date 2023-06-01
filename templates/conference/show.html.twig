@@ -10,7 +10,7 @@
 
         {% for comment in comments %}
             {% if comment.photofilename %}
-                <img src="{{ asset('uploads/photos/' ~ comment.photofilename) }}" style="max-width: 200px"/>
+                <img src="{{ asset('uploads/photos/' ~ comment.photofilename) }}"  alt="{{ conference }} comment photo" style="max-width: 200px"/>
             {% endif %}
 
             <h4>{{ comment.author }}</h4>
@@ -21,12 +21,11 @@
             <p>{{ comment.text }}</p>
         {% endfor %}
 
-        {% if previous >= 0 %}
-            <a href="{{ path('conference', { id: conference.id, offset: previous }) }}">Previous</a>
-        {% endif %}
-        {% if next < comments|length %}
-            <a href="{{ path('conference', { id: conference.id, offset: next }) }}">Next</a>
-        {% endif %}
+        <div class="navigation">
+            {% for page in 1..pagesCount %}
+                <a href="{{ path('conference', {'id': conference.id, 'offset': (page - 1) * constant('App\\Repository\\CommentRepository::PAGINATOR_PER_PAGE')}) }}">{{ page }}</a>
+            {% endfor %}
+        </div>
     {% else %}
         <div>No comments have been posted yet for this conference.</div>
     {% endif %}
